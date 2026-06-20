@@ -4,32 +4,199 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Labico in Frasca 2026</title>
+
+<style>
+body{
+    margin:0;
+    padding:15px;
+    font-family:Arial,sans-serif;
+    background:#efe4c8;
+}
+
+.header{
+    text-align:center;
+    background:white;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.header h1{
+    margin:5px;
+}
+
+.btn{
+    width:100%;
+    padding:22px;
+    font-size:24px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:12px;
+    color:white;
+    font-weight:bold;
+}
+
+.adulti{background:#1e4fa8;}
+.bambini{background:#4aa3df;}
+.panino{background:#b85c2e;}
+.vino{background:#7a1f4d;}
+.birra{background:#c99700;}
+
+.box{
+    background:white;
+    border-radius:15px;
+    padding:15px;
+    margin-top:15px;
+}
+
+.riga{
+    display:flex;
+    justify-content:space-between;
+    padding:5px 0;
+}
+
+.totale{
+    font-size:32px;
+    text-align:center;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.actions button{
+    width:100%;
+    padding:15px;
+    margin-top:8px;
+    font-size:20px;
+    border:none;
+    border-radius:10px;
+}
+
+.stampa{background:#2d7d32;color:white;}
+.chiudi{background:#1976d2;color:white;}
+.azzera{background:#b71c1c;color:white;}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    font-size:20px;
+}
+</style>
 </head>
-<body style="font-family:Arial;background:#efe4c8;text-align:center;padding:20px">
 
+<body>
+
+<div class="header">
 <h1>🍷 LABICO IN FRASCA 2026</h1>
-
 <h2>Fraschetta de Sor Pippo 'nPiazzetta</h2>
+</div>
 
-<button style="width:90%;padding:20px;font-size:24px;margin:10px">
-Menù Adulti €22
+<button class="btn adulti" onclick="aggiungi('Menù Adulti',22)">🍽️ MENÙ ADULTI €22</button>
+
+<button class="btn bambini" onclick="aggiungi('Menù Bambini',12)">🧒 MENÙ BAMBINI €12</button>
+
+<button class="btn panino" onclick="aggiungi('Panino',5)">🥖 PANINO €5</button>
+
+<button class="btn vino" onclick="aggiungi('Panino + Vino',6)">🍷 PANINO + VINO €6</button>
+
+<button class="btn birra" onclick="aggiungi('Panino + Birra',10)">🍺 PANINO + BIRRA €10</button>
+
+<div class="box">
+<h3>ORDINE CORRENTE</h3>
+
+<div id="ordine"></div>
+
+<div class="totale">
+Totale € <span id="totale">0</span>
+</div>
+</div>
+
+<div class="actions">
+
+<button class="stampa" onclick="window.print()">
+🖨️ STAMPA
 </button>
 
-<button style="width:90%;padding:20px;font-size:24px;margin:10px">
-Menù Bambini €12
+<button class="chiudi" onclick="chiudiOrdine()">
+✅ CHIUDI ORDINE
 </button>
 
-<button style="width:90%;padding:20px;font-size:24px;margin:10px">
-Panino €5
+<button class="azzera" onclick="azzera()">
+❌ AZZERA
 </button>
 
-<button style="width:90%;padding:20px;font-size:24px;margin:10px">
-Panino + Vino €6
-</button>
+</div>
 
-<button style="width:90%;padding:20px;font-size:24px;margin:10px">
-Panino + Birra €10
-</button>
+<div class="footer">
+Ordine #<span id="numeroOrdine">1</span><br>
+Incasso Oggi € <span id="incasso">0</span>
+</div>
+
+<script>
+
+let totale=0;
+let incasso=0;
+let ordine=1;
+
+const quantita={};
+
+function aggiungi(nome,prezzo){
+
+    quantita[nome]=(quantita[nome]||0)+1;
+
+    totale+=prezzo;
+
+    aggiorna();
+}
+
+function aggiorna(){
+
+    let html='';
+
+    for(let voce in quantita){
+
+        html+=`
+        <div class="riga">
+            <span>${voce}</span>
+            <span>${quantita[voce]}</span>
+        </div>`;
+    }
+
+    document.getElementById('ordine').innerHTML=html;
+
+    document.getElementById('totale').innerText=totale.toFixed(2);
+}
+
+function azzera(){
+
+    for(let k in quantita){
+        delete quantita[k];
+    }
+
+    totale=0;
+
+    aggiorna();
+}
+
+function chiudiOrdine(){
+
+    if(totale===0){
+        alert('Ordine vuoto');
+        return;
+    }
+
+    incasso+=totale;
+
+    document.getElementById('incasso').innerText=incasso.toFixed(2);
+
+    ordine++;
+
+    document.getElementById('numeroOrdine').innerText=ordine;
+
+    alert('Ordine registrato!');
+
+    azzera();
+}
+</script>
 
 </body>
 </html>
