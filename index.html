@@ -3,83 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Labico in Frasca 2026</title>
+
+<title>Cassa Sor Pippo</title>
 
 <style>
+
 body{
-    margin:0;
-    padding:15px;
-    font-family:Arial,sans-serif;
-    background:#efe4c8;
+margin:0;
+padding:15px;
+font-family:Arial,sans-serif;
+background:#efe4c8;
 }
 
 .header{
-    text-align:center;
-    background:white;
-    border-radius:15px;
-    padding:15px;
-    margin-bottom:15px;
+background:white;
+padding:15px;
+border-radius:12px;
+text-align:center;
+margin-bottom:15px;
 }
 
 .header h1{
-    margin:5px;
+margin:5px;
 }
 
 .btn{
-    width:100%;
-    padding:22px;
-    font-size:24px;
-    margin-bottom:10px;
-    border:none;
-    border-radius:12px;
-    color:white;
-    font-weight:bold;
+width:100%;
+padding:20px;
+margin-bottom:10px;
+font-size:24px;
+border:none;
+border-radius:12px;
+color:white;
+font-weight:bold;
 }
 
-.adulti{background:#1e4fa8;}
+.adulti{background:#1f4ea3;}
 .bambini{background:#4aa3df;}
-.panino{background:#b85c2e;}
+.panino{background:#b56a2d;}
 .vino{background:#7a1f4d;}
 .birra{background:#c99700;}
 
 .box{
-    background:white;
-    border-radius:15px;
-    padding:15px;
-    margin-top:15px;
+background:white;
+padding:15px;
+border-radius:12px;
+margin-top:10px;
 }
 
 .riga{
-    display:flex;
-    justify-content:space-between;
-    padding:5px 0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:8px 0;
+border-bottom:1px solid #eee;
+}
+
+.minus{
+background:#c62828;
+color:white;
+border:none;
+border-radius:8px;
+padding:6px 10px;
 }
 
 .totale{
-    font-size:32px;
-    text-align:center;
-    font-weight:bold;
-    margin-top:10px;
+font-size:32px;
+font-weight:bold;
+text-align:center;
+margin-top:10px;
 }
 
-.actions button{
-    width:100%;
-    padding:15px;
-    margin-top:8px;
-    font-size:20px;
-    border:none;
-    border-radius:10px;
+.action{
+width:100%;
+padding:14px;
+margin-top:8px;
+font-size:18px;
+border:none;
+border-radius:10px;
 }
 
-.stampa{background:#2d7d32;color:white;}
-.chiudi{background:#1976d2;color:white;}
-.azzera{background:#b71c1c;color:white;}
+.green{
+background:#2e7d32;
+color:white;
+}
+
+.blue{
+background:#1565c0;
+color:white;
+}
+
+.red{
+background:#c62828;
+color:white;
+}
 
 .footer{
-    text-align:center;
-    margin-top:20px;
-    font-size:20px;
+text-align:center;
+margin-top:20px;
+font-size:18px;
 }
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.5);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:500px;
+}
+
 </style>
 </head>
 
@@ -90,112 +134,299 @@ body{
 <h2>Fraschetta de Sor Pippo 'nPiazzetta</h2>
 </div>
 
-<button class="btn adulti" onclick="aggiungi('Menù Adulti',22)">🍽️ MENÙ ADULTI €22</button>
+<button class="btn adulti" onclick="aggiungi('Menù Adulti',22)">
+🍽️ MENÙ ADULTI €22
+</button>
 
-<button class="btn bambini" onclick="aggiungi('Menù Bambini',12)">🧒 MENÙ BAMBINI €12</button>
+<button class="btn bambini" onclick="aggiungi('Menù Bambini',12)">
+🧒 MENÙ BAMBINI €12
+</button>
 
-<button class="btn panino" onclick="aggiungi('Panino',5)">🥖 PANINO €5</button>
+<button class="btn panino" onclick="aggiungi('Panino',5)">
+🥖 PANINO €5
+</button>
 
-<button class="btn vino" onclick="aggiungi('Panino + Vino',6)">🍷 PANINO + VINO €6</button>
+<button class="btn vino" onclick="aggiungi('Panino + Vino',6)">
+🍷 PANINO + VINO €6
+</button>
 
-<button class="btn birra" onclick="aggiungi('Panino + Birra',10)">🍺 PANINO + BIRRA €10</button>
+<button class="btn birra" onclick="aggiungi('Panino + Birra',10)">
+🍺 PANINO + BIRRA €10
+</button>
 
 <div class="box">
-<h3>ORDINE CORRENTE</h3>
+
+<h3>Ordine Corrente</h3>
 
 <div id="ordine"></div>
 
 <div class="totale">
-Totale € <span id="totale">0</span>
-</div>
+€ <span id="totale">0.00</span>
 </div>
 
-<div class="actions">
-
-<button class="stampa" onclick="window.print()">
-🖨️ STAMPA
+<button class="action green" onclick="riepilogo()">
+🧾 RIEPILOGO ORDINE
 </button>
 
-<button class="chiudi" onclick="chiudiOrdine()">
-✅ CHIUDI ORDINE
+<button class="action blue" onclick="ristampa()">
+🔄 RISTAMPA ULTIMO
 </button>
 
-<button class="azzera" onclick="azzera()">
+<button class="action blue" onclick="statistiche()">
+📊 STATISTICHE
+</button>
+
+<button class="action red" onclick="azzera()">
 ❌ AZZERA
 </button>
 
 </div>
 
 <div class="footer">
-Ordine #<span id="numeroOrdine">1</span><br>
-Incasso Oggi € <span id="incasso">0</span>
+
+Ordine #
+<span id="numeroOrdine"></span>
+
+<br><br>
+
+Incasso Totale €
+<span id="incasso"></span>
+
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-content" id="contenutoModal"></div>
 </div>
 
 <script>
 
-let totale=0;
-let incasso=0;
-let ordine=1;
+let quantita={};
 
-const quantita={};
+let totale=0;
+
+let incasso=parseFloat(
+localStorage.getItem("incasso") || 0
+);
+
+let ordine=parseInt(
+localStorage.getItem("ordine") || 1
+);
+
+let ultimoOrdine=
+localStorage.getItem("ultimoOrdine") || "";
+
+let stats=
+JSON.parse(
+localStorage.getItem("stats") || "{}"
+);
+
+render();
+
+function salva(){
+
+localStorage.setItem("incasso",incasso);
+localStorage.setItem("ordine",ordine);
+localStorage.setItem("ultimoOrdine",ultimoOrdine);
+localStorage.setItem("stats",JSON.stringify(stats));
+
+}
 
 function aggiungi(nome,prezzo){
 
-    quantita[nome]=(quantita[nome]||0)+1;
+quantita[nome]=(quantita[nome]||0)+1;
 
-    totale+=prezzo;
+totale+=prezzo;
 
-    aggiorna();
+render();
+
 }
 
-function aggiorna(){
+function togli(nome){
 
-    let html='';
+if(!quantita[nome]) return;
 
-    for(let voce in quantita){
+quantita[nome]--;
 
-        html+=`
-        <div class="riga">
-            <span>${voce}</span>
-            <span>${quantita[voce]}</span>
-        </div>`;
-    }
+if(nome==="Menù Adulti") totale-=22;
+if(nome==="Menù Bambini") totale-=12;
+if(nome==="Panino") totale-=5;
+if(nome==="Panino + Vino") totale-=6;
+if(nome==="Panino + Birra") totale-=10;
 
-    document.getElementById('ordine').innerHTML=html;
+if(quantita[nome]<=0){
+delete quantita[nome];
+}
 
-    document.getElementById('totale').innerText=totale.toFixed(2);
+render();
+
+}
+
+function render(){
+
+let html='';
+
+for(let voce in quantita){
+
+html+=`
+<div class="riga">
+<span>${voce} x ${quantita[voce]}</span>
+<button class="minus"
+onclick="togli('${voce}')">
+➖
+</button>
+</div>
+`;
+
+}
+
+document.getElementById("ordine").innerHTML=
+html || "Nessun prodotto";
+
+document.getElementById("totale").innerText=
+totale.toFixed(2);
+
+document.getElementById("incasso").innerText=
+incasso.toFixed(2);
+
+document.getElementById("numeroOrdine").innerText=
+ordine;
+
 }
 
 function azzera(){
 
-    for(let k in quantita){
-        delete quantita[k];
-    }
+quantita={};
 
-    totale=0;
+totale=0;
 
-    aggiorna();
+render();
+
 }
 
-function chiudiOrdine(){
+function riepilogo(){
 
-    if(totale===0){
-        alert('Ordine vuoto');
-        return;
-    }
+if(totale===0){
 
-    incasso+=totale;
+alert("Ordine vuoto");
 
-    document.getElementById('incasso').innerText=incasso.toFixed(2);
+return;
 
-    ordine++;
-
-    document.getElementById('numeroOrdine').innerText=ordine;
-
-    alert('Ordine registrato!');
-
-    azzera();
 }
+
+let testo='';
+
+for(let voce in quantita){
+
+testo+=`
+<div>${voce} x ${quantita[voce]}</div>
+`;
+
+}
+
+document.getElementById("contenutoModal").innerHTML=`
+<h2>Ordine #${ordine}</h2>
+
+${testo}
+
+<hr>
+
+<h3>Totale € ${totale.toFixed(2)}</h3>
+
+<button class="action green"
+onclick="confermaOrdine()">
+✅ CONFERMA
+</button>
+
+<button class="action red"
+onclick="chiudiModal()">
+❌ ANNULLA
+</button>
+`;
+
+document.getElementById("modal").style.display="flex";
+
+}
+
+function chiudiModal(){
+
+document.getElementById("modal").style.display="none";
+
+}
+
+function confermaOrdine(){
+
+let testo=
+"LABICO IN FRASCA 2026\n\n";
+
+testo+=
+"FRASCHETTA DE SOR PIPPO 'NPIAZZETTA\n\n";
+
+testo+=
+"ORDINE #" + ordine + "\n\n";
+
+for(let voce in quantita){
+
+testo+=
+voce + " x " + quantita[voce] + "\n";
+
+stats[voce]=(stats[voce]||0)+quantita[voce];
+
+}
+
+testo+=
+"\nTOTALE € " + totale.toFixed(2);
+
+ultimoOrdine=testo;
+
+incasso+=totale;
+
+ordine++;
+
+salva();
+
+azzera();
+
+chiudiModal();
+
+alert("Ordine registrato!");
+
+}
+
+function ristampa(){
+
+if(!ultimoOrdine){
+
+alert("Nessun ordine registrato");
+
+return;
+
+}
+
+alert(ultimoOrdine);
+
+}
+
+function statistiche(){
+
+let testo=
+"ORDINI TOTALI: " + (ordine-1) +
+"\n\n";
+
+for(let voce in stats){
+
+testo+=
+voce + ": " + stats[voce] + "\n";
+
+}
+
+testo+=
+"\nINCASSO € " +
+incasso.toFixed(2);
+
+alert(testo);
+
+}
+
 </script>
 
 </body>
